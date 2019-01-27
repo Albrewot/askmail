@@ -12,12 +12,12 @@ const mongoose = require("mongoose");
 const User = mongoose.model("users");
 
 passport.serializeUser((user, done) => {
-  done(err, user.id);
+  done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
   User.findById(id).then(user => {
-    done(err, user);
+    done(null, user);
   });
 });
 
@@ -37,7 +37,7 @@ passport.use(
       User.findOne({ googleID: profile.id }).then(existingUser => {
         if (existingUser) {
           //User is Already Registered
-          done(err, existingUser);
+          done(null, existingUser);
         } else {
           new User({
             googleID: profile.id,
@@ -47,7 +47,7 @@ passport.use(
             googleRefreshToken: refreshToken,
           })
             .save()
-            .then(user => done(err, user));
+            .then(user => done(null, user));
         }
       });
     },
